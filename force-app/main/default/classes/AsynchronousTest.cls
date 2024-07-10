@@ -64,7 +64,9 @@ public with sharing class AsynchronousTest {
     @IsTest
     static void nextStepFuture_testCreateDealAndUpdateRole() {        
         Test.startTest();
-        NextStepFuture.createDealAndUpdateRole();
+        NextStepFuture.createDeal();
+        // Call updateRole method separately to avoid Mixed DML error
+        NextStepFuture.updateRoleFuture();
         Test.stopTest();
 
         // Due to the Mixed DML error, we need to test the insertBigDeal method

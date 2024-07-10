@@ -57,10 +57,15 @@ public with sharing class NextStepFuture {
     * Update the corresponding test class AsynchronousTest and test method nextStepFuture_testCreateDealAndUpdateRole to cover test this method
     */
     //Mix DML Error happens when you try to perform DML operations on setup and non-setup objects in a single transaction.
-    public static void createDealAndUpdateRole() {
+    @future
+    public static void createDeal() {
         Opportunity bigDeal = new Opportunity();
         insertBigDeal(bigDeal);
+    }
 
+    // Moved updateRole into it's own method to avoid Mix DML error 
+    @future
+    public static void updateRoleFuture() {
         UserRole[] roles = [SELECT Id, Name FROM UserRole WHERE Id = :UserInfo.getUserRoleId() OR Name = 'CRO' LIMIT 1];
         updateUserRoleName(roles);
     }
