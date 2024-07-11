@@ -27,9 +27,28 @@ public with sharing class NextStepFuture {
      * Opportunity Next Step field is a standard field
      * Update the corresponding test class AsynchronousTest and test method nextStepFuture_testUpdateAllNextStep to cover test this method
      */
-    //[public | private ] [static] data_type method_name (input parameters) {
-    //  The body of the method
-    //}
+    public static void updateAllNextStep() {
+        // String variable for next step field on accounts and opportunities
+        final String NEXT_STEP = 'Meeting in the future';
+        
+        // Query all Accounts and Opportunities
+        List<Account> accts = [SELECT Id, Next_Step__c FROM Account];
+        List<Opportunity> opps = [SELECT Id, NextStep FROM Opportunity];
+        
+        // Loop through accounts and update the next step field
+        for (Account acc : accts) {
+            acc.Next_Step__c = NEXT_STEP;
+        }
+
+        // Loop through opportunities and update the next step field
+        for (Opportunity opp : opps) {
+            opp.NextStep = NEXT_STEP;
+        }
+
+        // Update accounts and opportunities
+        update accts;
+        update opps;
+    }
 
     /*
     * Question 2
@@ -38,10 +57,15 @@ public with sharing class NextStepFuture {
     * Update the corresponding test class AsynchronousTest and test method nextStepFuture_testCreateDealAndUpdateRole to cover test this method
     */
     //Mix DML Error happens when you try to perform DML operations on setup and non-setup objects in a single transaction.
-    public static void createDealAndUpdateRole() {
+    @future
+    public static void createDeal() {
         Opportunity bigDeal = new Opportunity();
         insertBigDeal(bigDeal);
+    }
 
+    // Moved updateRole into it's own method to avoid Mix DML error 
+    @future
+    public static void updateRoleFuture() {
         UserRole[] roles = [SELECT Id, Name FROM UserRole WHERE Id = :UserInfo.getUserRoleId() OR Name = 'CRO' LIMIT 1];
         updateUserRoleName(roles);
     }
